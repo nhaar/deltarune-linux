@@ -25,7 +25,7 @@ def main():
 
 def replace_variable_in_code(code: str, variable_name: str, old_value, value) -> str:
     '''
-    Replaces a variable in pytho code with a new value.
+    Replaces a variable in python code with a new value.
     
     Args:
         code (str): The code to replace the variable in.
@@ -88,6 +88,8 @@ def create_for_version(version, base_code):
         version (dict): The dictionary with the version details.
         base_code (str): The base code for the converter.
     '''
+    
+    # Known game files in this version
     files = deepcopy(BASE_FILES)
     if 'exclusive_files' in version:
         files.extend(version['exclusive_files'])

@@ -1,5 +1,5 @@
 # Files that exist in all versions of the game
-BASE_FILES  = [
+BASE_FILES = [
     'audiogroup1.dat',
     'AUDIO_INTRONOISE.ogg',
     'AUDIO_INTRONOISE_ch1.ogg',
@@ -159,6 +159,11 @@ BASE_FILES  = [
     'mus/wind_highplace.ogg'
 ]
 
+# Lists the information for each version.
+# The 'name' key is the name of the script.
+# The 'versions' key is a list of the versions supported as named in the game.
+# The 'gms_version' key is the version of GameMaker Studio used to create the game.
+# The 'exclusive_files' key is optional and contains files that only exist in this version.
 VERSION_DETAILS = [
     {
         'name': 'steam-latest',
