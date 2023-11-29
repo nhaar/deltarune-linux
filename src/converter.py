@@ -1,19 +1,28 @@
-import sys
 import base64
 import os
 import shutil
 import subprocess
+import argparse
 
-if len(sys.argv) != 2:
-    print("Usage: python3 converter.py <path>")
-    sys.exit(1)
+parser = argparse.ArgumentParser(description='Converts the game to a Linux-compatible version.')
+
+parser.add_argument('arg1', nargs='?', type=str, help='Path to the game directory, if not given it will default to the Steam directory')
+parser.add_argument('arg2', nargs='?', type=str, help='Path to the new game directory, if not given it will be created in the script\'s directory')
+
+args = parser.parse_args()
 
 # The string will be supplied by the generator
 RUNNER_BINARY_STRING = ''
 RUNNER_BINARY = base64.b64decode(RUNNER_BINARY_STRING)
 
-# Path to the directory
-DELTARUNE_PATH = sys.argv[1]
+# Steam folder name
+DELTARUNE_NAME = 'DELTARUNEdemo'
+
+# Path to the directory where the game is located
+DELTARUNE_PATH = args.arg1 if args.arg1 else os.path.expanduser(f'~/.steam/steam/steamapps/common/{DELTARUNE_NAME}')
+
+# Path where the new game will be created
+NEW_DELTARUNE_PATH = args.arg2 if args.arg2 else os.path.join(os.getcwd(), DELTARUNE_NAME)
 
 # Subdirectories that need to be created
 DELTARUNE_DIRECTORIES = [
@@ -21,7 +30,7 @@ DELTARUNE_DIRECTORIES = [
     'lang'
 ]
 
-# File that will be moved, converting to lower case because of case-insensitive filesystems
+# File that will be copied, converting to lower case because of case-insensitive filesystems
 DELTARUNE_FILES = [
     'audiogroup1.dat',
     'AUDIO_INTRONOISE.ogg',
@@ -183,25 +192,25 @@ DELTARUNE_FILES = [
     'mus/wind_highplace.ogg'
 ]
 
+assets_path = os.path.join(NEW_DELTARUNE_PATH, 'assets')
+
 for directory in DELTARUNE_DIRECTORIES:
-    os.makedirs(os.path.join(DELTARUNE_PATH, 'assets', directory), exist_ok=True)
+    os.makedirs(os.path.join(assets_path, directory), exist_ok=True)
 
 for file in DELTARUNE_FILES:
     file_path = os.path.join(DELTARUNE_PATH, file)
     if (os.path.isfile(file_path)):
-        shutil.move(os.path.join(DELTARUNE_PATH, file), os.path.join(DELTARUNE_PATH, 'assets', file.lower()))
-
-# Windows executable is not needed
-os.remove(os.path.join(DELTARUNE_PATH, 'DELTARUNE.exe'))
+        shutil.copy(file_path, os.path.join(assets_path, file.lower()))
 
 # Rename it so it works on Linux
-os.rename(os.path.join(DELTARUNE_PATH, 'assets', 'data.win'), os.path.join(DELTARUNE_PATH, 'assets', 'game.unx'))
+os.rename(os.path.join(assets_path, 'data.win'), os.path.join(assets_path, 'game.unx'))
 
-with open(os.path.join(DELTARUNE_PATH, "runner"), "wb") as f:
+runner_path = os.path.join(NEW_DELTARUNE_PATH, "runner")
+
+with open(runner_path, "wb") as f:
     f.write(RUNNER_BINARY)
 
 # Give executable perms
-print(os.path.isfile(runner_path))
 subprocess.run(['chmod', '+rwx', runner_path])
 
 # Download needed library
