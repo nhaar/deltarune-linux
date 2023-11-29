@@ -21,8 +21,8 @@ else:
 
 parser = argparse.ArgumentParser(description=f'Converts the game to a Linux-compatible version. Works for Deltarune Steam {version_noun} {version_string}.')
 
-parser.add_argument('ORIGINAL_GAME_DIRECTORY', nargs='?', type=str, help='Path to the game directory, if not given it will use the default Steam directory')
-parser.add_argument('NEW_GAME_DIRECTORY', nargs='?', type=str, help='Path to the new game directory, if not given it will be created in the script\'s directory')
+parser.add_argument('-o', '--original_game_path', type=str, help='Path to the game directory, if not given it will use the default Steam directory')
+parser.add_argument('-n', '--new_game_path', type=str, help='Path to the new game directory, if not given it will be created in the script\'s directory')
 
 args = parser.parse_args()
 
@@ -34,18 +34,18 @@ RUNNER_BINARY = base64.b64decode(RUNNER_BINARY_STRING)
 DELTARUNE_NAME = 'DELTARUNEdemo'
 
 # Path to the directory where the game is located
-DELTARUNE_PATH = args.ORIGINAL_GAME_DIRECTORY if args.ORIGINAL_GAME_DIRECTORY else os.path.expanduser(f'~/.steam/steam/steamapps/common/{DELTARUNE_NAME}')
+DELTARUNE_PATH = args.original_game_path if args.original_game_path else os.path.expanduser(f'~/.steam/steam/steamapps/common/{DELTARUNE_NAME}')
 
 if (not os.path.isdir(DELTARUNE_PATH)):
-    if (args.ORIGINAL_GAME_DIRECTORY):
-        print(f'The game directory {args.ORIGINAL_GAME_DIRECTORY} was not found.')
+    if (args.original_game_path):
+        print(f'The game directory {args.original_game_path} was not found.')
     else:
         print('The game directory was not found. Please supply it as an argument or make sure the game is installed.')
     subprocess.run(['python3', os.path.realpath(__file__), '-h'])
     exit()
 
 # Path where the new game will be created
-NEW_DELTARUNE_PATH = args.NEW_GAME_DIRECTORY if args.NEW_GAME_DIRECTORY else os.path.join(os.getcwd(), DELTARUNE_NAME)
+NEW_DELTARUNE_PATH = args.new_game_path if args.new_game_path else os.path.join(os.getcwd(), DELTARUNE_NAME)
 
 # File that will be copied, converting to lower case because of case-insensitive filesystems
 # This is empty and will be supplied by the generator
