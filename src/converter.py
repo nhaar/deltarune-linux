@@ -44,24 +44,19 @@ if (not os.path.isdir(DELTARUNE_PATH)):
 # Path where the new game will be created
 NEW_DELTARUNE_PATH = args.arg2 if args.arg2 else os.path.join(os.getcwd(), DELTARUNE_NAME)
 
-# Subdirectories that need to be created
-DELTARUNE_DIRECTORIES = [
-    'mus',
-    'lang'
-]
-
 # File that will be copied, converting to lower case because of case-insensitive filesystems
 DELTARUNE_FILES = []
 
 assets_path = os.path.join(NEW_DELTARUNE_PATH, 'assets')
 
-for directory in DELTARUNE_DIRECTORIES:
-    os.makedirs(os.path.join(assets_path, directory), exist_ok=True)
-
 for file in DELTARUNE_FILES:
     file_path = os.path.join(DELTARUNE_PATH, file)
     if (os.path.isfile(file_path)):
-        shutil.copy(file_path, os.path.join(assets_path, file.lower()))
+        new_file_path = os.path.join(assets_path, file.lower())
+        file_directory = os.path.dirname(new_file_path)
+        if (not os.path.isdir(file_directory)):
+            os.makedirs(file_directory)
+        shutil.copy(file_path, new_file_path)
     else:
         print('Game file not found:', file_path)
         print('Make sure you have the correct game version installed and that you have supplied the correct game directory and try again.')
