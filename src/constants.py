@@ -162,6 +162,7 @@ BASE_FILES  = [
 VERSION_DETAILS = [
     {
         'name': 'steam-latest',
-        'versions': ['1.10']
+        'versions': ['1.10'],
+        'gms_version': '2022.1'
     }
 ]

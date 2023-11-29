@@ -25,7 +25,14 @@ def create_for_version(version, base_code):
     if 'exclusive_files' in version:
         files.extend(version['exclusive_files'])
 
-    converter_code = replace_variable_in_code(converter_code, 'DELTARUNE_FILES', '[]', files)
+    converter_code = replace_list_variable_in_code(converter_code, 'DELTARUNE_FILES', files)
+
+    # binary will be converted and saved as a string in the script
+    # the runners need to be supplied manually for the script to work
+    with open(f'input/runner_{version["gms_version"].replace(".", "_")}', 'rb') as binary_file:
+        binary_file_data = binary_file.read()
+        encoded_binary = base64.b64encode(binary_file_data).decode('utf-8')
+        converter_code = replace_string_variable_in_code(converter_code, 'RUNNER_BINARY_STRING', encoded_binary)
 
     with open(f'output/converter-{version["name"]}.py', 'w') as output_file:
         output_file.write(minify(converter_code))
@@ -35,16 +42,7 @@ def main():
     # original code that will be built for production
     converter_code = open("src/converter.py", "r").read()
 
-    # binary will be converted and saved as a string in the script
-    encoded_binary = ''
-
-    # this runner needs to be supplied manually for the script to work
-    with open('input/runner', 'rb') as binary_file:
-        binary_file_data = binary_file.read()
-        encoded_binary = base64.b64encode(binary_file_data).decode('utf-8')
-
     string_variables_to_define = {
-        'RUNNER_BINARY_STRING': encoded_binary,
         'LIBRARY_LINK': 'http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.20_amd64.deb',
         'LIBRARY_FILE': 'libssl1.1_1.1.1f-1ubuntu2.20_amd64.deb'
     }
