@@ -2,13 +2,13 @@
 
 This is a script that will convert a Windows copy of DELTARUNE to one that can be used in Linux.
 
-# Converting your game to Liunx
+# Converting your game to Linux
 
 To convert the game, follow these steps:
 
-1. Download the version of DELTARUNE from Windows that you want to use.
+1. Download the version of DELTARUNE from Windows that you want to use (check step 2 to know if your game's version is supported).
 
-2. Download the script for the version you want to use.
+2. [Download the script for the version you want to use here](https://github.com/nhaar/deltarune-linux/releases/latest).
 
 3. Run the following command to run the script:
 ```bash
