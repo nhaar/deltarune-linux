@@ -6,7 +6,7 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Converts the game to a Linux-compatible version.')
 
-parser.add_argument('arg1', nargs='?', type=str, help='Path to the game directory, if not given it will default to the Steam directory')
+parser.add_argument('arg1', nargs='?', type=str, help='Path to the game directory, if not given it will default to the default Steam directory')
 parser.add_argument('arg2', nargs='?', type=str, help='Path to the new game directory, if not given it will be created in the script\'s directory')
 
 args = parser.parse_args()
@@ -20,6 +20,14 @@ DELTARUNE_NAME = 'DELTARUNEdemo'
 
 # Path to the directory where the game is located
 DELTARUNE_PATH = args.arg1 if args.arg1 else os.path.expanduser(f'~/.steam/steam/steamapps/common/{DELTARUNE_NAME}')
+
+if (not os.path.isdir(DELTARUNE_PATH)):
+    if (args.arg1):
+        print(f'The game directory {args.arg1} was not found.')
+    else:
+        print('The game directory was not found. Please supply it as an argument.')
+    subprocess.run(['python3', os.path.realpath(__file__), '-h'])
+    exit()
 
 # Path where the new game will be created
 NEW_DELTARUNE_PATH = args.arg2 if args.arg2 else os.path.join(os.getcwd(), DELTARUNE_NAME)
