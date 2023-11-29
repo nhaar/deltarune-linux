@@ -162,7 +162,13 @@ BASE_FILES  = [
 VERSION_DETAILS = [
     {
         'name': 'steam-latest',
-        'versions': ['1.10'],
+        'versions': ['1.10', '1.09'],
         'gms_version': '2022.1'
+    },
+    {
+        'name': 'steam-beta-latest',
+        'versions': ['1.15'],
+        'gms_version': '2022.2',
+        'exclusive_files': ['Steamworks.dll']
     }
 ]
