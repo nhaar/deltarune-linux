@@ -16,7 +16,14 @@ def main():
         binary_file_data = binary_file.read()
         encoded_binary = base64.b64encode(binary_file_data).decode('utf-8')
 
-    converter_code = converter_code.replace('b64decode("")', f'b64decode("{encoded_binary}")')
+    variables_to_define = {
+        'RUNNER_BINARY_STRING': encoded_binary,
+        'LIBRARY_LINK': 'http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.20_amd64.deb',
+        'LIBRARY_FILE': 'libssl1.1_1.1.1f-1ubuntu2.20_amd64.deb'
+    }
+
+    for variable_name, variable_value in variables_to_define.items():
+        converter_code = converter_code.replace(f'{variable_name} = \'\'', f'{variable_name} = \'{variable_value}\'')
 
     os.makedirs('output', exist_ok=True)
     with open('output/converter.py', 'w') as output_file:

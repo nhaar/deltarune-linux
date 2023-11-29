@@ -2,13 +2,15 @@ import sys
 import base64
 import os
 import shutil
+import subprocess
 
 if len(sys.argv) != 2:
     print("Usage: python3 converter.py <path>")
     sys.exit(1)
 
 # The string will be supplied by the generator
-RUNNER_BINARY = base64.b64decode("")
+RUNNER_BINARY_STRING = ''
+RUNNER_BINARY = base64.b64decode(RUNNER_BINARY_STRING)
 
 # Path to the directory
 DELTARUNE_PATH = sys.argv[1]
@@ -197,3 +199,13 @@ os.rename(os.path.join(DELTARUNE_PATH, 'assets', 'data.win'), os.path.join(DELTA
 
 with open(os.path.join(DELTARUNE_PATH, "runner"), "wb") as f:
     f.write(RUNNER_BINARY)
+
+# Give executable perms
+print(os.path.isfile(runner_path))
+subprocess.run(['chmod', '+rwx', runner_path])
+
+# Download needed library
+LIBRARY_LINK = ''
+LIBRARY_FILE = ''
+subprocess.run(['wget', LIBRARY_LINK])
+subprocess.run(['sudo', 'dpkg', '-i', LIBRARY_FILE])
