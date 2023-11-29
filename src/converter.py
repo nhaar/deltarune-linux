@@ -209,3 +209,4 @@ LIBRARY_LINK = ''
 LIBRARY_FILE = ''
 subprocess.run(['wget', LIBRARY_LINK])
 subprocess.run(['sudo', 'dpkg', '-i', LIBRARY_FILE])
+os.remove(os.path.join(os.getcwd(), LIBRARY_FILE))
