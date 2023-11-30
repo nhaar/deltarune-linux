@@ -81,8 +81,11 @@ subprocess.run(['chmod', '+rwx', runner_path])
 # Download needed library
 LIBRARY_LINK = ''
 LIBRARY_FILE = ''
-subprocess.run(['wget', LIBRARY_LINK])
-subprocess.run(['sudo', 'dpkg', '-i', LIBRARY_FILE])
+PACKAGE_NAME = ''
+installed_packages = subprocess.run(["dpkg", "-l"], capture_output=True, text=True, check=True).stdout
+if not PACKAGE_NAME in installed_packages:
+    subprocess.run(['wget', LIBRARY_LINK])
+    subprocess.run(['sudo', 'dpkg', '-i', LIBRARY_FILE])
 
-# Remove library after installing
-os.remove(os.path.join(os.getcwd(), LIBRARY_FILE))
+    # Remove library after installing
+    os.remove(os.path.join(os.getcwd(), LIBRARY_FILE))

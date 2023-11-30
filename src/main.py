@@ -13,6 +13,7 @@ def main():
     converter_code = open("src/converter.py", "r").read()
 
     converter_code = replace_multiple_variables_in_code(converter_code, {
+        'PACKAGE_NAME': 'libssl1.1',
         'LIBRARY_LINK': 'http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.20_amd64.deb',
         'LIBRARY_FILE': 'libssl1.1_1.1.1f-1ubuntu2.20_amd64.deb'
     }, replace_string_variable_in_code)
